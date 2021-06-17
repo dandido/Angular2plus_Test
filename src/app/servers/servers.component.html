@@ -1,0 +1,12 @@
+<label>
+  <input type="text"
+         class="form-control"
+         [(ngModel)] ="serverName" >
+</label>
+
+<button class="btn btn-primary"
+        (click)="onCreateServer()">
+  Add New Server
+</button>
+<div class="app-server" *ngFor="let e of serverNames"> a</div>
+

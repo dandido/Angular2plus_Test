@@ -1,0 +1,12 @@
+<button class="btn btn-primary" (click)="onToggleButton()" > Toggle Password</button>
+<!--<p [hidden]="toogle"> Password is your mommay</p>
+<p *ngFor="let logItem of log"
+   [ngStyle]="{'background-color': logItem %2 ==0 ?'blue' : 'red'}"
+   [ngClass]="{'white-text' : logItem %2 ==0 , 'greyText' : logItem %2 !=0}"
+> {{logItem}}</p>-->
+
+
+<p *ngFor="let logItem of logDate ;let i = index"
+   [ngStyle]="{'background-color': i %2 ==0 ?'blue' : 'red'}"
+   [ngClass]="{'white-text' : i %2 ==0 , 'greyText' : i %2 !=0}"
+> {{logItem}}</p>
