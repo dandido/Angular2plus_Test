@@ -1,0 +1,38 @@
+<p [ngStyle]="{'background-color' : 'blue'}" [ngClass]="{online: serverStatus==='OnLine'}">
+  this is the same  : {{'idServer'}}  as this : {{idComponent}} {{getServerStatus()}}
+</p>
+<p [ngStyle]="{backgroundColor : 'red'}" [ngClass]="{online: serverStatus==='OnLine'}">
+  this is the same  : {{'idServer'}}  as this : {{idComponent}} {{getServerStatus()}}
+</p>
+<p [ngStyle]="{backgroundColor : getColor()}" [ngClass]="{online: serverStatus==='OnLine'}">
+  this is the same  : {{'idServer'}}  as this : {{idComponent}} {{getServerStatus()}}
+</p>
+
+<label>
+  <input type="text"
+         class="form-control"
+        (input)="onUpdateServerName($event)">
+</label>
+
+<label>
+  <input type="text"
+         class="form-control"
+         [(ngModel)] ="serverName" >
+</label>
+
+<button class="btn btn-primary"
+        (click)="onCreateServer()"
+        [disabled]="!allowNewServer">
+  Add New Server
+  </button>
+<p>{{allowNewServer}}</p>
+<p [innerText]="allowNewServer" ></p>
+<p>{{serverCreationStatus}}</p>
+<p>{{serverName}}</p>
+
+<p *ngIf="serverCreated; else noServer"> button clicked {{serverName}}</p>
+<ng-template #noServer>
+  <p>  button not clicked {{serverName}}</p>
+</ng-template>
+
+
