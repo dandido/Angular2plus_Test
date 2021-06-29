@@ -57,6 +57,7 @@ export class RecipeService{
     this.httpclient.post<{name: string}>(this.url+this.recipespath,recipe)
       .subscribe(responseData=> {
       console.log(responseData);
+        recipe.id = responseData.name;
         this.recipes.push(recipe);
         this.recipeChanged.next(this.recipes.slice());
         this.sucessPostHandling.next(responseData);
@@ -67,7 +68,11 @@ export class RecipeService{
   }
 
   updateRecipe(index: number, newRecipe: Recipe){
-    this.httpclient.put(this.url+this.recipespath,newRecipe).subscribe(responseData=> {
+   const test = {
+      [this.recipes[index].id] : newRecipe
+    }
+    //newRecipe.id = this.recipes[index].id;
+    this.httpclient.put(this.url+this.recipespath,test).subscribe(responseData=> {
       this.recipes[index] = newRecipe;
       this.recipeChanged.next(this.recipes.slice());
       this.sucessPostHandling.next(responseData);
