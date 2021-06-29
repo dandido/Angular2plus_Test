@@ -10,7 +10,9 @@ import {Subscription} from "rxjs";
   styleUrls: ['./recipe-list.component.css']
 })
 export class RecipeListComponent implements OnInit, OnDestroy {
-  recipes: Recipe[];
+  isFetching: boolean =true;
+  errorFetching: boolean =false;
+  recipes: Recipe[] = [];
   recipSub: Subscription;
   filtredStatus: any ='';
 
@@ -19,14 +21,24 @@ export class RecipeListComponent implements OnInit, OnDestroy {
       resolve('stable')
     },2000);
   });
+  errorFetchingMessage: string = 'Cannot Fetch data';
+  InfoFetchingMessage: string = 'Please wait while fetching data';
 
   constructor(private recipeService: RecipeService,
               private activateRoute: ActivatedRoute,
               private  router:Router) { }
 
   ngOnInit(): void {
-    this.recipes = this.recipeService.getReciper();
-
+    this.recipeService.getReciper().subscribe(responseData=> {
+      console.log(responseData)
+      this.recipes= responseData;
+      this.isFetching = false;
+      //return a copy => new Array
+      this.recipes = this.recipes.slice();
+    },(err)=> {
+      this.isFetching = false;
+      this.errorFetching = true;
+    });
     this.recipSub = this.recipeService.recipeChanged.subscribe(  (recipes: Recipe[])=> {
       this.recipes = recipes;
     })

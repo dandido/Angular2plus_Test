@@ -1,3 +1,11 @@
+
+<div class="row" *ngIf='errorMessageHandlingPut_Post'>
+  <div class="col-xs-12 alert alert-danger">
+    <h3>{{errorMessageHandlingPut_Post.name}}</h3>
+    <p>{{errorMessageHandlingPut_Post.message}}</p>
+  </div>
+</div>
+
 <div class="row">
   <div class="col-xs-12">
     <form [formGroup]="recipeFrom" (ngSubmit)="OnSubmit()">

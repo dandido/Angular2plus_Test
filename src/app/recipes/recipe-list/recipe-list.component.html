@@ -2,15 +2,30 @@
   <div class="col-xs-12">
     <button class="btn btn-success" (click)="OnNewRecipe()">New Recipe</button>
   </div>
-  <input type="text" [(ngModel)]="filtredStatus">*
+  <input type="text" [(ngModel)]="filtredStatus">
   <br> <br>
   {{appStatus | async}}
 </div>
-<div class="row">
+<div class="row" *ngIf='!isFetching'>
   <div class="col-xs-12">
       <app-recipe-item *ngFor="let item of recipes | filterby:filtredStatus:'name';
                        index as i"
                        [item] = item
                        [index]="i">   </app-recipe-item>
+  </div>
+</div>
+
+
+<div class="row" *ngIf='isFetching'>
+  <div class="col-xs-12 alert alert-info">
+    <h3>Loading...</h3>
+    <p>{{InfoFetchingMessage}}</p>
+  </div>
+</div>
+
+<div class="row" *ngIf='errorFetching'>
+  <div class="col-xs-12 alert alert-danger">
+   <h3>An Error Has Occured</h3>
+    <p>{{errorFetchingMessage}}</p>
   </div>
 </div>

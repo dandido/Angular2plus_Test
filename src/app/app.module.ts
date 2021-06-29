@@ -21,6 +21,7 @@ import { RecipeEditComponent } from './recipes/recipe-edit/recipe-edit.component
 import {RecipeService} from "./recipes/recipe.service";
 import {ShortenPipe} from "./shorten.pipe";
 import { FilterbyPipe } from './filterby.pipe';
+import {HttpClient, HttpClientModule} from "@angular/common/http";
 
 @NgModule({
   declarations: [
@@ -45,7 +46,9 @@ import { FilterbyPipe } from './filterby.pipe';
         BrowserModule,
         FormsModule,
         ReactiveFormsModule,
-        AppRoutingModule
+        HttpClientModule,
+        AppRoutingModule,
+
     ],
   providers: [ShoppingListService,RecipeService],
   bootstrap: [AppComponent]

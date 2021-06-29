@@ -1,19 +1,25 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {FormArray, FormControl, FormGroup, Validators} from "@angular/forms";
 import {RecipeService} from "../recipe.service";
 import {Recipe} from "../recipe-list/recipe-item/recipe.model";
+import {Subscription} from "rxjs";
 
 @Component({
   selector: 'app-recipe-edit',
   templateUrl: './recipe-edit.component.html',
   styleUrls: ['./recipe-edit.component.css']
 })
-export class RecipeEditComponent implements OnInit {
+export class RecipeEditComponent implements OnInit, OnDestroy {
 
   id: number;
   editMode: boolean =false;
   recipeFrom: FormGroup;
+  errorMessageHandlingPut_Post: any = null ;
+
+
+  private subErrorHandling:Subscription;
+  private subsuccessHandling:Subscription;
 
 
   constructor(private activeRoute: ActivatedRoute,
@@ -21,6 +27,9 @@ export class RecipeEditComponent implements OnInit {
               private router:Router) { }
 
   ngOnInit(): void {
+
+
+
     this.activeRoute.params.subscribe((params)=> {
       this.id = params["id"];
       this.editMode = params['id'] != null;
@@ -44,7 +53,19 @@ export class RecipeEditComponent implements OnInit {
       this.recipeService.addRecipe(newRecipe)
 
     }
-    this.onCancel();
+    //sub to the error message while posting or put data
+    this.subErrorHandling = this.recipeService.errorPostHandling.subscribe(errorMessage=> {
+      this.errorMessageHandlingPut_Post = errorMessage;
+      if(this.errorMessageHandlingPut_Post.status !== 401){
+        this.onCancel();
+      }
+    });
+
+    this.subsuccessHandling = this.recipeService.sucessPostHandling.subscribe(()=> {
+      this.errorMessageHandlingPut_Post = null;
+      this.onCancel();
+    });
+
   }
 
   private initForm(){
@@ -104,5 +125,10 @@ export class RecipeEditComponent implements OnInit {
 
   onDeleteIngrident(index: number) {
     (<FormArray>this.recipeFrom.get('ingredients')).removeAt(index);
+  }
+
+  ngOnDestroy(): void {
+    this.subErrorHandling.unsubscribe();
+    this.subsuccessHandling.unsubscribe();
   }
 }
