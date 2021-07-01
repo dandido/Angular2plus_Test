@@ -3,8 +3,8 @@ import {Injectable} from '@angular/core';
 import {Ingredient} from "../shared/ingredient.model";
 import {ShoppingListService} from "../shopping-list/shoppingList.service";
 import {Subject, throwError} from "rxjs";
-import {HttpClient} from "@angular/common/http";
-import {catchError, map} from "rxjs/operators";
+import {HttpClient, HttpEventType, HttpHeaders, HttpParams} from "@angular/common/http";
+import {catchError, map, tap} from "rxjs/operators";
 
 @Injectable()
 export class RecipeService{
@@ -23,7 +23,16 @@ export class RecipeService{
   sucessPostHandling = new Subject<any>();
 
   getReciper(){
-    return this.httpclient.get<Recipe[]>(this.url+this.recipespath)
+    //for multi params :
+    let searchparam = new HttpParams();
+    searchparam = searchparam.append('print','pretty');
+    searchparam = searchparam.append('addME','pretty');
+
+    return this.httpclient.get<Recipe[]>(this.url+this.recipespath,{
+      headers: new HttpHeaders({'CustomHeader' :'tests'}),
+      //params: new HttpParams().set('print','pretty').set('qqq','pretty')
+      params : searchparam
+    })
       .pipe(map(responseData => {
         const ingArray:Recipe[] =[];
         for (const key in responseData){
@@ -54,13 +63,17 @@ export class RecipeService{
 
 
   addRecipe(recipe: Recipe){
-    this.httpclient.post<{name: string}>(this.url+this.recipespath,recipe)
+    this.httpclient.post<{name: string}>(
+      this.url+this.recipespath
+      ,recipe
+    ,{observe:'response'}) // or body or events
       .subscribe(responseData=> {
       console.log(responseData);
-        recipe.id = responseData.name;
+        // @ts-ignore
+        recipe.id = responseData.body.name;
         this.recipes.push(recipe);
         this.recipeChanged.next(this.recipes.slice());
-        this.sucessPostHandling.next(responseData);
+        this.sucessPostHandling.next(responseData.body);
     }, error=> {
         this.errorPostHandling.next(error);
       });
@@ -72,7 +85,17 @@ export class RecipeService{
       [this.recipes[index].id] : newRecipe
     }
     //newRecipe.id = this.recipes[index].id;
-    this.httpclient.put(this.url+this.recipespath,test).subscribe(responseData=> {
+    this.httpclient.put(this.url+this.recipespath,test,
+      {observe:'events'} // or body or events or response
+  ).pipe(tap( event=> {
+      console.log(event);
+      if (event.type === HttpEventType.Sent){
+        console.log("Done");
+
+      }
+    }))
+      .subscribe(responseData=> {
+      console.log(responseData);
       this.recipes[index] = newRecipe;
       this.recipeChanged.next(this.recipes.slice());
       this.sucessPostHandling.next(responseData);
