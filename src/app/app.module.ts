@@ -23,6 +23,8 @@ import {ShortenPipe} from "./shorten.pipe";
 import { FilterbyPipe } from './filterby.pipe';
 import {HTTP_INTERCEPTORS, HttpClient, HttpClientModule} from "@angular/common/http";
 import {AuthInterceptorService} from "./AuthInterceptor.service";
+import { AuthComponent } from './auth/auth/auth.component';
+import { LoadingSpinnerComponent } from './loading-spinner/loading-spinner.component';
 
 @NgModule({
   declarations: [
@@ -41,7 +43,9 @@ import {AuthInterceptorService} from "./AuthInterceptor.service";
     RecipeStartComponent,
     RecipeEditComponent,
     ShortenPipe,
-    FilterbyPipe
+    FilterbyPipe,
+    AuthComponent,
+    LoadingSpinnerComponent
   ],
     imports: [
         BrowserModule,

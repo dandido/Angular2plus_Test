@@ -9,9 +9,14 @@ export class AuthInterceptorService implements HttpInterceptor{
     // manip
     //const modifRes = req.clone({url : 'blablabla'})
     const modifRes = req.clone({headers:req.headers
-        .append('test','1111')
-        .append('Auth','SecretKeyDoNotPutItInTheCode'),
-      params:req.params.append('azerty','qwerty')})
+        //.append('test','1111')
+       // .append('Auth','SecretKeyDoNotPutItInTheCode')
+   /*   .append('Access-Control-Allow-Origin','*')
+      .append('Content-Type','application/json')
+      .append("Access-Control-Allow-Methods", "DELETE, POST, GET, OPTIONS")
+        .append('Access-Control-Allow-Credentials', 'true')
+  .append("Access-Control-Allow-Headers", "Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With")*/
+      ,params:req.params.append('azerty','qwerty')})
 
     console.log('REquest On tje file')
    // do not forget to return the new one

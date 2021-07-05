@@ -15,7 +15,7 @@ export class RecipeService{
  // private recipes:Recipe[];
   url:string = 'https://ng-complete-guide-938cf-default-rtdb.europe-west1.firebasedatabase.app/';
   recipespath:string = 'recipes.json'
-  private recipes: Recipe[];
+  recipes: Recipe[];
 
   //let's say that post and/or put are used in different components
   //use a subject
@@ -41,8 +41,11 @@ export class RecipeService{
             ingArray.push({ ...responseData[key] , id:key})
           }
         }
-        this.recipes = ingArray.slice();
-        return ingArray;
+        this.recipes = ingArray.map(recipe=> {
+          return {...recipe, ingredient :recipe.ingredient? recipe.ingredient : []}
+        });
+
+        return this.recipes.slice();
       }),
         catchError(errorRes => {
           //send to analytc or to a subject.next ....
@@ -58,7 +61,6 @@ export class RecipeService{
 
   getReciperByid(id: number) {
     return this.recipes[id];
-
   }
 
 
