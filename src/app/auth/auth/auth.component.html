@@ -1,0 +1,42 @@
+<div class="row">
+  <div class="col-xs-12 col-md-6 col-md-offset-3">
+
+    <div class="alert alert-danger" *ngIf="errorAuth">
+      <h3> An Error Has Occured !!! </h3>
+      <p> {{errorAuth}}</p>
+    </div>
+    <div *ngIf="isLoading">
+      <app-loading-spinner></app-loading-spinner>
+    </div>
+    <form #authRef="ngForm" (ngSubmit)="onSubmit(authRef)" *ngIf="!isLoading">
+      <div class="form-group">
+        <label for="email">   email     </label>
+
+        <input type="email"
+               id="email"
+               class="form-control"
+               ngModel
+               name="email"
+               required
+               email />
+      </div>
+      <div class="form-group">
+        <label for="password">  password      </label>
+
+        <input type="password"
+               id="password"
+               class="form-control"
+               ngModel
+               name="password"
+               required
+               minlength="6"   />
+      </div>
+      <button class="btn btn-primary" type="submit" [disabled]="!authRef.valid">
+        {{isUserLoggedIn? 'Login' : 'SignUp'}}
+      </button>
+      <button class="btn btn-primary col-xs-offset-7 col-md-offset-8" type="button" (click)="onSwitchMode()">
+        {{caption2}}
+      </button>
+    </form>
+  </div>
+</div>
