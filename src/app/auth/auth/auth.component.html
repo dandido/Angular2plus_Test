@@ -5,6 +5,12 @@
       <h3> An Error Has Occured !!! </h3>
       <p> {{errorAuth}}</p>
     </div>
+
+    <div class="alert alert-success" *ngIf="SingUpOkey">
+      <h3> Done !!! </h3>
+      <p> {{SingUpOkey}}</p>
+    </div>
+
     <div *ngIf="isLoading">
       <app-loading-spinner></app-loading-spinner>
     </div>

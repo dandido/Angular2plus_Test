@@ -12,6 +12,7 @@ export class AuthComponent implements OnInit {
   caption2: string ="Switch to Login";
   isUserLoggedIn = false;
   isLoading = false;
+  SingUpOkey:string = ""
 
   errorAuth: string = "";
 
@@ -34,10 +35,22 @@ export class AuthComponent implements OnInit {
     }
     this.errorAuth= "";
     this.isLoading = true;
+    this.SingUpOkey ="";
 
     //console.log(authRef.value);
     if(!this.isUserLoggedIn){
       this.authservice.signUp(authRef.value.email,authRef.value.password).subscribe(response=> {
+        console.log(response);
+        this.isUserLoggedIn = true;
+        this.isLoading =false;
+        this.SingUpOkey = "Success"
+      }, errorMessage => {
+        console.log(errorMessage);
+        this.errorAuth = errorMessage;
+        this.isLoading =false;
+      })
+    }else{
+      this.authservice.singIn(authRef.value.email,authRef.value.password).subscribe(response=> {
         console.log(response);
         this.isUserLoggedIn = true;
         this.isLoading =false;
@@ -46,8 +59,6 @@ export class AuthComponent implements OnInit {
         this.errorAuth = errorMessage;
         this.isLoading =false;
       })
-    }else{
-      //.....
     }
     authRef.reset();
 

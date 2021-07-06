@@ -43,7 +43,23 @@ export class AuthService{
    }))
   }
 
-  singIn(){
+  singIn(email:string, password:string){
     const url = this.fireBaseSignIn+ this.ApiKey;
+    return this.httpClient.post<AuthResponseData>(url,
+      {
+        email, password , returnSecureToken: true
+      }).pipe(catchError(errorRes=>{
+      let errorMessage ='';
+      if (!errorRes.error || !errorRes.error.error){
+        return throwError(errorMessage);
+      }
+      switch (errorRes.error.error.message){
+        case 'EMAIL_EXISTS' : errorMessage = 'This Email Exists déja';
+
+      }
+      return throwError(errorMessage)
+
+    }))
+
   }
 }
