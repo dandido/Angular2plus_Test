@@ -1,17 +1,17 @@
 import {Injectable} from "@angular/core";
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpErrorResponse} from "@angular/common/http";
 import {catchError} from "rxjs/operators";
 import {throwError} from "rxjs";
 
 
 interface AuthResponseData{
-  kind: string,
-  idToken: string,
-  email: string,
-  refreshToken: string,
-  expiresIn: string,
-  localId: string,
-
+  kind: string;
+  idToken: string;
+  email: string;
+  refreshToken: string;
+  expiresIn: string;
+  localId: string;
+  registred?: boolean;
 }
 
 
@@ -27,39 +27,29 @@ export class AuthService{
   signUp(email:string, password:string){
     const url =  this.fireBaseSignUp+ this.ApiKey;
    return this.httpClient.post<AuthResponseData>(url,
-      {
-        email, password , returnSecureToken: true
-      }).pipe(catchError(errorRes=>{
-        let errorMessage ='';
-        if (!errorRes.error || !errorRes.error.error){
-          return throwError(errorMessage);
-        }
-        switch (errorRes.error.error.message){
-          case 'EMAIL_EXISTS' : errorMessage = 'This Email Exists déja';
-
-        }
-     return throwError(errorMessage)
-
-   }))
+      {  email, password , returnSecureToken: true
+      }).pipe(catchError(this.handleError ))
   }
 
   singIn(email:string, password:string){
     const url = this.fireBaseSignIn+ this.ApiKey;
     return this.httpClient.post<AuthResponseData>(url,
-      {
-        email, password , returnSecureToken: true
-      }).pipe(catchError(errorRes=>{
-      let errorMessage ='';
-      if (!errorRes.error || !errorRes.error.error){
-        return throwError(errorMessage);
-      }
-      switch (errorRes.error.error.message){
-        case 'EMAIL_EXISTS' : errorMessage = 'This Email Exists déja';
+      { email, password , returnSecureToken: true
+      }).pipe(catchError(this.handleError  ))
 
-      }
-      return throwError(errorMessage)
+  }
 
-    }))
+  private handleError(errorRes : HttpErrorResponse){
+    let errorMessage ='Unknown Error ! Please contact your administrator';
+    if (!errorRes.error || !errorRes.error.error){
+      return throwError(errorMessage);
+    }
+    switch (errorRes.error.error.message){
+      case 'EMAIL_EXISTS' : errorMessage = 'This Email Exists déja';break;
+      case 'INVALID_PASSWORD' : errorMessage = 'Invalid UserName or Password';break;
+      case 'EMAIL_NOT_FOUND' : errorMessage='Invalid UserName or Password';break;
+    }
+    return throwError(errorMessage)
 
   }
 }
