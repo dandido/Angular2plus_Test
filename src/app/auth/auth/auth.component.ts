@@ -54,6 +54,7 @@ export class AuthComponent implements OnInit {
         console.log(response);
         this.isUserLoggedIn = true;
         this.isLoading =false;
+        this.SingUpOkey = "Success"
       }, errorMessage => {
         console.log(errorMessage);
         this.errorAuth = errorMessage;
