@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {NgForm} from "@angular/forms";
-import {AuthService} from "./auth.service";
+import {AuthResponseData, AuthService} from "./auth.service";
+import {Router} from "@angular/router";
+import {Observable} from "rxjs";
 
 @Component({
   selector: 'app-auth',
@@ -16,7 +18,7 @@ export class AuthComponent implements OnInit {
 
   errorAuth: string = "";
 
-  constructor(private authservice: AuthService) { }
+  constructor(private authservice: AuthService , private router:Router) { }
 
 
   ngOnInit(): void {
@@ -37,30 +39,28 @@ export class AuthComponent implements OnInit {
     this.isLoading = true;
     this.SingUpOkey ="";
 
+    let authObservable : Observable<AuthResponseData>;
+
     //console.log(authRef.value);
     if(!this.isUserLoggedIn){
-      this.authservice.signUp(authRef.value.email,authRef.value.password).subscribe(response=> {
-        console.log(response);
-        this.isUserLoggedIn = true;
-        this.isLoading =false;
-        this.SingUpOkey = "Success"
-      }, errorMessage => {
-        console.log(errorMessage);
-        this.errorAuth = errorMessage;
-        this.isLoading =false;
-      })
+      authObservable = this.authservice.signUp(authRef.value.email,authRef.value.password);
     }else{
-      this.authservice.singIn(authRef.value.email,authRef.value.password).subscribe(response=> {
-        console.log(response);
-        this.isUserLoggedIn = true;
-        this.isLoading =false;
-        this.SingUpOkey = "Success"
-      }, errorMessage => {
-        console.log(errorMessage);
-        this.errorAuth = errorMessage;
-        this.isLoading =false;
-      })
+      authObservable = this.authservice.singIn(authRef.value.email,authRef.value.password);
     }
+
+    authObservable.subscribe(response=> {
+      console.log(response);
+      this.isUserLoggedIn = true;
+      this.isLoading =false;
+      this.SingUpOkey = "Success"
+      this.router.navigate(['/recipes']);
+    }, errorMessage => {
+      this.errorAuth = errorMessage;
+      this.isLoading =false;
+    })
+
+
+
     authRef.reset();
 
       }

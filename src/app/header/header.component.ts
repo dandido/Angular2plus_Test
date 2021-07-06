@@ -1,6 +1,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Observable, Observer, Subscription} from "rxjs";
 import {count, map} from "rxjs/operators";
+import {AuthService} from "../auth/auth/auth.service";
 
 @Component({
   selector: 'app-header',
@@ -8,10 +9,22 @@ import {count, map} from "rxjs/operators";
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent implements OnInit,OnDestroy {
-  constructor() { }
+  constructor(private authservice: AuthService) {
 
+  }
+
+  isAuthUser= false;
+  private userSub : Subscription;
   private firstSubcustomObservable: Subscription;
   ngOnInit(): void {
+
+    //user connecté
+    this.userSub = this.authservice.user.subscribe(user=>{
+      //this.isAuthUser = !user? false: true;
+      this.isAuthUser = !!user;
+    });
+
+
     const customObservable = new Observable((observer) => {
       let count = 0;
       setInterval(()=> {
@@ -41,6 +54,7 @@ export class HeaderComponent implements OnInit,OnDestroy {
   }
 
   ngOnDestroy(): void {
+    this.userSub.unsubscribe();
     this.firstSubcustomObservable.unsubscribe();
   }
 

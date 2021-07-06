@@ -1,10 +1,11 @@
 import {Injectable} from "@angular/core";
 import {HttpClient, HttpErrorResponse} from "@angular/common/http";
-import {catchError} from "rxjs/operators";
-import {throwError} from "rxjs";
+import {catchError, tap} from "rxjs/operators";
+import {Subject, throwError} from "rxjs";
+import {User} from "../../../user.model";
 
 
-interface AuthResponseData{
+export interface AuthResponseData{
   kind: string;
   idToken: string;
   email: string;
@@ -22,21 +23,33 @@ export class AuthService{
   private fireBaseSignIn:string = "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=";
   private fireBaseSignUp:string = "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key="
 
+  //store user as Subject ( login - signUp or logout)
+  user = new Subject<User>();
+
   constructor(private httpClient : HttpClient) { }
 
   signUp(email:string, password:string){
     const url =  this.fireBaseSignUp+ this.ApiKey;
    return this.httpClient.post<AuthResponseData>(url,
       {  email, password , returnSecureToken: true
-      }).pipe(catchError(this.handleError ))
+      }).pipe(catchError(this.handleError))
   }
 
   singIn(email:string, password:string){
     const url = this.fireBaseSignIn+ this.ApiKey;
     return this.httpClient.post<AuthResponseData>(url,
       { email, password , returnSecureToken: true
-      }).pipe(catchError(this.handleError  ))
+      }).pipe(catchError(this.handleError),
+      tap(rst=> {
+        this.handleAuth(rst.email,rst.localId,rst.idToken,+rst.expiresIn)
+      }))
 
+  }
+
+  private handleAuth(email:string ,localId : string ,token : string , expiresIn:number){
+    const expiration = new Date(new Date().getTime() + +expiresIn * 1000) // mill sec
+    const user = new User(email,localId,token,expiration)
+    this.user.next(user);
   }
 
   private handleError(errorRes : HttpErrorResponse){
