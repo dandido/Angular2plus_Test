@@ -108,6 +108,7 @@ export class AuthService{
 
     this.autoLogout(new Date(userData._tokenExpirationDate).getTime()-new Date().getTime()); // how much time it will take to logout
     this.token.next(loadedUser);
+    this.user.next(loadedUser);
 
 
   }
