@@ -25,6 +25,7 @@ import {HTTP_INTERCEPTORS, HttpClient, HttpClientModule} from "@angular/common/h
 import {AuthInterceptorService} from "./AuthInterceptor.service";
 import { AuthComponent } from './auth/auth/auth.component';
 import { LoadingSpinnerComponent } from './loading-spinner/loading-spinner.component';
+import {LoggingInterceptorService} from "./loggingInterceptor.service";
 
 @NgModule({
   declarations: [
@@ -54,11 +55,16 @@ import { LoadingSpinnerComponent } from './loading-spinner/loading-spinner.compo
         HttpClientModule,
         AppRoutingModule,
     ],
-  providers: [ShoppingListService,RecipeService
-  ,   {
+  providers: [ShoppingListService,RecipeService,
+    {
       provide : HTTP_INTERCEPTORS,
       multi: true,
       useClass: AuthInterceptorService
+    },
+    {
+      provide : HTTP_INTERCEPTORS,
+      multi: true,
+      useClass: LoggingInterceptorService
     }
   ],
   bootstrap: [AppComponent]

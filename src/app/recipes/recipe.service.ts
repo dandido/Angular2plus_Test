@@ -30,15 +30,12 @@ export class RecipeService{
     searchparam = searchparam.append('print','pretty');
     searchparam = searchparam.append('addME','pretty');
 
-
-    //sub only once
-   return this.authService.token.pipe(take(1),
-      exhaustMap(tests=>{
-        return this.httpclient.get<Recipe[]>(this.url+this.recipespath,{
-          headers: new HttpHeaders({'CustomHeader' :'tests'}),
-          params: new HttpParams().set('auth',tests.token)
-        })
-      }),map(responseData => {
+    return this.httpclient.get<Recipe[]>(this.url+this.recipespath,{
+      headers: new HttpHeaders({'CustomHeader' :'tests'}),
+      //params: new HttpParams().set('print','pretty').set('qqq','pretty')
+      params : searchparam
+    })
+      .pipe(map(responseData => {
         const ingArray:Recipe[] =[];
         for (const key in responseData){
           if (responseData.hasOwnProperty(key))
