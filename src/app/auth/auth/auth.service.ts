@@ -1,7 +1,7 @@
 import {Injectable} from "@angular/core";
 import {HttpClient, HttpErrorResponse} from "@angular/common/http";
 import {catchError, tap} from "rxjs/operators";
-import {Subject, throwError} from "rxjs";
+import {BehaviorSubject, Subject, throwError} from "rxjs";
 import {User} from "../../../user.model";
 
 
@@ -25,6 +25,9 @@ export class AuthService{
 
   //store user as Subject ( login - signUp or logout)
   user = new Subject<User>();
+  // @ts-ignore
+  token = new BehaviorSubject<User>(null);
+
 
   constructor(private httpClient : HttpClient) { }
 
@@ -50,6 +53,7 @@ export class AuthService{
     const expiration = new Date(new Date().getTime() + +expiresIn * 1000) // mill sec
     const user = new User(email,localId,token,expiration)
     this.user.next(user);
+    this.token.next(user);
   }
 
   private handleError(errorRes : HttpErrorResponse){

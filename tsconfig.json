@@ -4,7 +4,7 @@
   "compilerOptions": {
 
     "strictPropertyInitialization": false,
-
+    "strictNullChecks":false,
     "baseUrl": "./",
     "outDir": "./dist/out-tsc",
     "forceConsistentCasingInFileNames": true,

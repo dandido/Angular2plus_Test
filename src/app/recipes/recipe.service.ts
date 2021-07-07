@@ -4,13 +4,15 @@ import {Ingredient} from "../shared/ingredient.model";
 import {ShoppingListService} from "../shopping-list/shoppingList.service";
 import {Subject, throwError} from "rxjs";
 import {HttpClient, HttpEventType, HttpHeaders, HttpParams} from "@angular/common/http";
-import {catchError, map, tap} from "rxjs/operators";
+import {catchError, exhaustMap, map, take, tap} from "rxjs/operators";
+import {AuthService} from "../auth/auth/auth.service";
 
 @Injectable()
 export class RecipeService{
   recipeChanged = new Subject<Recipe[]>();
   constructor(private shoppingListService:ShoppingListService,
-              private httpclient:HttpClient) {
+              private httpclient:HttpClient,
+              private authService: AuthService) {
   }
  // private recipes:Recipe[];
   url:string = 'https://ng-complete-guide-938cf-default-rtdb.europe-west1.firebasedatabase.app/';
@@ -28,12 +30,15 @@ export class RecipeService{
     searchparam = searchparam.append('print','pretty');
     searchparam = searchparam.append('addME','pretty');
 
-    return this.httpclient.get<Recipe[]>(this.url+this.recipespath,{
-      headers: new HttpHeaders({'CustomHeader' :'tests'}),
-      //params: new HttpParams().set('print','pretty').set('qqq','pretty')
-      params : searchparam
-    })
-      .pipe(map(responseData => {
+
+    //sub only once
+   return this.authService.token.pipe(take(1),
+      exhaustMap(tests=>{
+        return this.httpclient.get<Recipe[]>(this.url+this.recipespath,{
+          headers: new HttpHeaders({'CustomHeader' :'tests'}),
+          params: new HttpParams().set('auth',tests.token)
+        })
+      }),map(responseData => {
         const ingArray:Recipe[] =[];
         for (const key in responseData){
           if (responseData.hasOwnProperty(key))
