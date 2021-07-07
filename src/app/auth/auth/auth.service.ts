@@ -23,6 +23,8 @@ export class AuthService{
   private ApiKey: string = "AIzaSyCHa_vghEY1ft8ebIcabCgvqAOXCw4vS98";
   private fireBaseSignIn:string = "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=";
   private fireBaseSignUp:string = "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key="
+  private tokenExpireTimer : any;
+
 
   //store user as Subject ( login - signUp or logout)
   user = new Subject<User>();
@@ -36,6 +38,12 @@ export class AuthService{
   logout(){
     this.token.next(null);
     this.user.next(null);
+    //clear when loging out
+    //localStorage.clear(); or
+    localStorage.removeItem('userData');
+    if(this.tokenExpireTimer){
+      clearTimeout(this.tokenExpireTimer);
+    }
     this.router.navigate(['/auth']);
   }
 
@@ -58,10 +66,11 @@ export class AuthService{
   }
 
   private handleAuth(email:string ,localId : string ,token : string , expiresIn:number){
-    const expiration = new Date(new Date().getTime() + +expiresIn * 1000) // mill sec
+    const expiration = new Date(new Date().getTime() + +expiresIn * 1000) // mill sec when it will expire in the future
     const user = new User(email,localId,token,expiration)
     this.user.next(user);
     this.token.next(user);
+    this.autoLogout(expiresIn*1000); // start the autologout in millis
     //store the user object 'JSON' as a string
     localStorage.setItem('userData',JSON.stringify(user));
   }
@@ -97,8 +106,18 @@ export class AuthService{
       return;
     }
 
+    this.autoLogout(new Date(userData._tokenExpirationDate).getTime()-new Date().getTime()); // how much time it will take to logout
     this.token.next(loadedUser);
 
 
+  }
+
+
+  autoLogout(expirationDuration : number){
+    //set a timer to auto user out millis
+
+    this.tokenExpireTimer = setTimeout(()=>{
+      this.logout()
+    },expirationDuration);
   }
 }
