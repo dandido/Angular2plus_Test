@@ -2,7 +2,7 @@ import {Injectable} from "@angular/core";
 import {ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree} from "@angular/router";
 import {Observable} from "rxjs";
 import {AuthService} from "./auth.service";
-import {map, tap} from "rxjs/operators";
+import {map, take, tap} from "rxjs/operators";
 
 @Injectable({providedIn:"root"})
 export class  AuthGuard implements CanActivate{
@@ -12,7 +12,7 @@ export class  AuthGuard implements CanActivate{
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot):
     Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree  {
 
-    return this.authService.token.pipe(
+    return this.authService.token.pipe(take(1),
       map(user => {
       const isAtuh = !!user;
       if (isAtuh) return true
