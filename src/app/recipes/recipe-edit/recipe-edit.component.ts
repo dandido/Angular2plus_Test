@@ -128,7 +128,11 @@ export class RecipeEditComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.subErrorHandling.unsubscribe();
-    this.subsuccessHandling.unsubscribe();
+    if (this.subErrorHandling){
+      this.subErrorHandling.unsubscribe();
+    }
+    if (this.subsuccessHandling){
+      this.subsuccessHandling.unsubscribe();
+    }
   }
 }
