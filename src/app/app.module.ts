@@ -26,6 +26,7 @@ import {AuthInterceptorService} from "./AuthInterceptor.service";
 import { AuthComponent } from './auth/auth/auth.component';
 import { LoadingSpinnerComponent } from './loading-spinner/loading-spinner.component';
 import {LoggingInterceptorService} from "./loggingInterceptor.service";
+import { AlertComponentComponent } from './alert-component/alert-component.component';
 
 @NgModule({
   declarations: [
@@ -46,7 +47,8 @@ import {LoggingInterceptorService} from "./loggingInterceptor.service";
     ShortenPipe,
     FilterbyPipe,
     AuthComponent,
-    LoadingSpinnerComponent
+    LoadingSpinnerComponent,
+    AlertComponentComponent
   ],
     imports: [
         BrowserModule,
