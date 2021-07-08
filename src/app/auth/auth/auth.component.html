@@ -1,8 +1,13 @@
 <div class="row">
   <div class="col-xs-12 col-md-6 col-md-offset-3">
 
+<!--Version1
     <app-alert-component [message]="errorAuth" *ngIf="errorAuth" (close)="onHandleErrorClose()"></app-alert-component>
+-->
 
+    <ng-template appPlaceHolderError></ng-template>
+
+    <div #addHere></div>
     <div class="alert alert-success" *ngIf="SingUpOkey">
       <h3> Done !!! </h3>
       <p> {{SingUpOkey}}</p>

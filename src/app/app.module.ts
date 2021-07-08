@@ -27,6 +27,7 @@ import { AuthComponent } from './auth/auth/auth.component';
 import { LoadingSpinnerComponent } from './loading-spinner/loading-spinner.component';
 import {LoggingInterceptorService} from "./loggingInterceptor.service";
 import { AlertComponentComponent } from './alert-component/alert-component.component';
+import { PlaceHolderErrorDirective } from './place-holder-error.directive';
 
 @NgModule({
   declarations: [
@@ -48,7 +49,8 @@ import { AlertComponentComponent } from './alert-component/alert-component.compo
     FilterbyPipe,
     AuthComponent,
     LoadingSpinnerComponent,
-    AlertComponentComponent
+    AlertComponentComponent,
+    PlaceHolderErrorDirective
   ],
     imports: [
         BrowserModule,
@@ -70,5 +72,6 @@ import { AlertComponentComponent } from './alert-component/alert-component.compo
     }
   ],
   bootstrap: [AppComponent]
+  //no need for entryComponent for the dynamic component cuz of Ivy (9or higuer)
 })
 export class AppModule { }
