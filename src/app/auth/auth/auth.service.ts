@@ -27,7 +27,6 @@ export class AuthService{
 
 
   //store user as Subject ( login - signUp or logout)
-  user = new Subject<User>();
   // @ts-ignore
   token = new BehaviorSubject<User>(null);
 
@@ -37,7 +36,6 @@ export class AuthService{
 
   logout(){
     this.token.next(null);
-    this.user.next(null);
     //clear when loging out
     //localStorage.clear(); or
     localStorage.removeItem('userData');
@@ -68,7 +66,6 @@ export class AuthService{
   private handleAuth(email:string ,localId : string ,token : string , expiresIn:number){
     const expiration = new Date(new Date().getTime() + +expiresIn * 1000) // mill sec when it will expire in the future
     const user = new User(email,localId,token,expiration)
-    this.user.next(user);
     this.token.next(user);
     this.autoLogout(expiresIn*1000); // start the autologout in millis
     //store the user object 'JSON' as a string
@@ -108,8 +105,6 @@ export class AuthService{
 
     this.autoLogout(new Date(userData._tokenExpirationDate).getTime()-new Date().getTime()); // how much time it will take to logout
     this.token.next(loadedUser);
-    this.user.next(loadedUser);
-
 
   }
 

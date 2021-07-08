@@ -11,6 +11,7 @@ export class LoggingInterceptorService implements HttpInterceptor{
   constructor(private authService: AuthService) {
   }
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+    //we need BehaviorSubject for this to work or it will be stuck at loading
     return this.authService.token.pipe(take(1),
       exhaustMap(userResponse=>{
 
