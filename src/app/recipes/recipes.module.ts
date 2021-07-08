@@ -26,15 +26,6 @@ import {RecipesRoutingModule} from "./recipes-routing.module";
   //RouterModule : get Rid of the routerOutlet erroor
   //make a seperate router Recipe and import it
   imports: [RouterModule,CommonModule,ReactiveFormsModule,FormsModule,RecipesRoutingModule],
-  exports:[
-    RecipesComponent,
-    RecipeListComponent,
-    RecipeDetailsComponent,
-    RecipeItemComponent,
-    RecipeStartComponent,
-    RecipeEditComponent
-
-  ]
 })
 export class RecipesModule{
 
