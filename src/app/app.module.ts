@@ -7,17 +7,11 @@ import {ServerComponent} from "./server/server.component";
 import { ServersComponent } from './servers/servers.component';
 import { Assign1Component } from './assign1/assign1.component';
 import { HeaderComponent } from './header/header.component';
-import { RecipesComponent } from './recipes/recipes.component';
-import { RecipeListComponent } from './recipes/recipe-list/recipe-list.component';
-import { RecipeDetailsComponent } from './recipes/recipe-details/recipe-details.component';
-import { RecipeItemComponent } from './recipes/recipe-list/recipe-item/recipe-item.component';
 import { ShoppingListComponent } from './shopping-list/shopping-list.component';
 import { ShoppingEditComponent } from './shopping-list/shopping-edit/shopping-edit.component';
 import { DropdownDirective } from './dropdown.directive';
 import {ShoppingListService} from "./shopping-list/shoppingList.service";
 import {AppRoutingModule} from "./app-routing.module";
-import { RecipeStartComponent } from './recipes/recipe-start/recipe-start.component';
-import { RecipeEditComponent } from './recipes/recipe-edit/recipe-edit.component';
 import {RecipeService} from "./recipes/recipe.service";
 import {ShortenPipe} from "./shorten.pipe";
 import { FilterbyPipe } from './filterby.pipe';
@@ -28,6 +22,7 @@ import { LoadingSpinnerComponent } from './loading-spinner/loading-spinner.compo
 import {LoggingInterceptorService} from "./loggingInterceptor.service";
 import { AlertComponentComponent } from './alert-component/alert-component.component';
 import { PlaceHolderErrorDirective } from './place-holder-error.directive';
+import {RecipesModule} from "./recipes/recipes.module";
 
 @NgModule({
   declarations: [
@@ -36,28 +31,21 @@ import { PlaceHolderErrorDirective } from './place-holder-error.directive';
     ServersComponent,
     Assign1Component,
     HeaderComponent,
-    RecipesComponent,
-    RecipeListComponent,
-    RecipeDetailsComponent,
-    RecipeItemComponent,
     ShoppingListComponent,
     ShoppingEditComponent,
     DropdownDirective,
-    RecipeStartComponent,
-    RecipeEditComponent,
-    ShortenPipe,
-    FilterbyPipe,
     AuthComponent,
     LoadingSpinnerComponent,
     AlertComponentComponent,
     PlaceHolderErrorDirective
   ],
     imports: [
-        BrowserModule,
+        BrowserModule,//to be used only once use CommunModule in all other module to not get the ngForOf Err
         FormsModule,
         ReactiveFormsModule,
         HttpClientModule,
         AppRoutingModule,
+        RecipesModule
     ],
   providers: [ShoppingListService,RecipeService,
     {
@@ -72,6 +60,6 @@ import { PlaceHolderErrorDirective } from './place-holder-error.directive';
     }
   ],
   bootstrap: [AppComponent]
-  //no need for entryComponent for the dynamic component cuz of Ivy (9or higuer)
+  //no need for entryComponent for the dynamic component cuz of Ivy (9version angular or higuer)
 })
 export class AppModule { }
