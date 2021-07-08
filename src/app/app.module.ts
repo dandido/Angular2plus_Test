@@ -7,14 +7,10 @@ import {ServerComponent} from "./server/server.component";
 import { ServersComponent } from './servers/servers.component';
 import { Assign1Component } from './assign1/assign1.component';
 import { HeaderComponent } from './header/header.component';
-import { ShoppingListComponent } from './shopping-list/shopping-list.component';
-import { ShoppingEditComponent } from './shopping-list/shopping-edit/shopping-edit.component';
 import { DropdownDirective } from './dropdown.directive';
 import {ShoppingListService} from "./shopping-list/shoppingList.service";
 import {AppRoutingModule} from "./app-routing.module";
 import {RecipeService} from "./recipes/recipe.service";
-import {ShortenPipe} from "./shorten.pipe";
-import { FilterbyPipe } from './filterby.pipe';
 import {HTTP_INTERCEPTORS, HttpClient, HttpClientModule} from "@angular/common/http";
 import {AuthInterceptorService} from "./AuthInterceptor.service";
 import { AuthComponent } from './auth/auth/auth.component';
@@ -23,6 +19,7 @@ import {LoggingInterceptorService} from "./loggingInterceptor.service";
 import { AlertComponentComponent } from './alert-component/alert-component.component';
 import { PlaceHolderErrorDirective } from './place-holder-error.directive';
 import {RecipesModule} from "./recipes/recipes.module";
+import {ShoppingListModule} from "./shopping-list/shoppingList-module";
 
 @NgModule({
   declarations: [
@@ -31,8 +28,6 @@ import {RecipesModule} from "./recipes/recipes.module";
     ServersComponent,
     Assign1Component,
     HeaderComponent,
-    ShoppingListComponent,
-    ShoppingEditComponent,
     DropdownDirective,
     AuthComponent,
     LoadingSpinnerComponent,
@@ -45,7 +40,8 @@ import {RecipesModule} from "./recipes/recipes.module";
         ReactiveFormsModule,
         HttpClientModule,
         AppRoutingModule,
-        RecipesModule
+        RecipesModule,
+        ShoppingListModule
     ],
   providers: [ShoppingListService,RecipeService,
     {

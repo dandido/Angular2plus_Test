@@ -11,6 +11,7 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {ShortenPipe} from "../shorten.pipe";
 import {FilterbyPipe} from "../filterby.pipe";
 import {RecipesRoutingModule} from "./recipes-routing.module";
+import {DropdownDirective} from "../dropdown.directive";
 
 @NgModule({
   declarations:[
