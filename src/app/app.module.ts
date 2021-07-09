@@ -26,10 +26,10 @@ import {AuthModule} from "./auth/auth/auth.module";
         HttpClientModule,
         AppRoutingModule,
        // RecipesModule, remove this one when using lazy => cuz this is eager loading
-        ShoppingListModule,
+       // ShoppingListModule,remove this one when using lazy => cuz this is eager loading
       SharedModule,
       CoreModule,
-      AuthModule
+      //AuthModule remove this one when using lazy => cuz this is eager loading
     ],
   bootstrap: [AppComponent]
   //no need for entryComponent for the dynamic component cuz of Ivy (9version angular or higuer)

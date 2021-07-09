@@ -1,7 +1,6 @@
 import {NgModule} from "@angular/core";
 import {RouterModule, Routes} from "@angular/router";
 import {ShoppingListComponent} from "./shopping-list/shopping-list.component";
-import {AuthComponent} from "./auth/auth/auth.component";
 
 
 const appRoute: Routes=[
@@ -10,7 +9,10 @@ const appRoute: Routes=[
   {path:'recipes',
     loadChildren: ()=> import('./recipes/recipes.module')
       .then(m=> m.RecipesModule) } // lazy loading
-
+  ,{path:'auth',
+    loadChildren: ()=> import('./auth/auth/auth.module').then(m=> m.AuthModule) } // lazy loading
+  ,{path:'shopping-list',
+    loadChildren: ()=> import('./shopping-list/shoppingList-module').then(m=> m.ShoppingListModule) } // lazy loading
 ];
 
 @NgModule({
